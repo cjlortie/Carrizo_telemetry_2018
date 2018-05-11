@@ -1,0 +1,157 @@
+---
+title:
+author: "cjlortie"
+date: "2018"
+output:
+  html_document:
+    theme: yeti
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+#Telemetry analytics of blunt-nosed leopard lizards
+<br>
+
+###Purpose
+To use telemetry to examine Gambelia sila frequency of habitat use within a desert ecosystem.
+
+
+<br>
+![](./G.sila.jpg)
+
+<br>
+[ecoblender](http://ecoblender.org)
+<br>
+
+###Methods
+A total of 30 lizards were instrumented in the Carrizo National Monument by Westphal and team. Individual animals were monitored for relocation patterns, georeferenced, and detailed observation applied to a subset of animals. Note: all telemetry work was done at site #4 on Elkhorn.
+
+
+```{r, library, warnings = FALSE, message=FALSE, echo=FALSE}
+#library loads
+#wrangling
+library(tidyverse)
+
+#packages <- c("rgdal", "maps", "multcomp", "nnet", "adehabitatHR", "raster", "maptools", "leaflet")
+
+#basic maps
+library(rgdal)
+library(maps)
+
+#models & posthoc tests
+library(multcomp)
+library(nnet) #package to run a multinomial linear regression
+
+#habitat
+library(adehabitatHR)
+library(raster) 
+library(rgdal)
+library(maptools)
+```
+
+###Primary data
+```{r, data}
+#load data####
+data <- read_csv("data/telemetry.relocations.csv")
+library(hms)
+data$time <- as.hms(data$time)
+data
+#data <- data %>% mutate(day.time = if(data$time >= 12) { 
+  #print("PM")} else {print("AM")
+    #})
+#data <- data %>% filter(behavior != "avoiding.predators")
+#data$behavior <- gsub("standing", "underground", data$behavior)
+
+#wrangle in gender of lizards here
+#lizards <- read_csv("data/lizards.2016.csv")
+#lizards <- lizards %>% dplyr::select(lizard, gender, mass, length.mm)
+#lizards <- lizards %>% filter(gender != "uk")
+#data <- left_join(data, lizards, by = "lizard")  
+
+#the 'data' dataframe = a data structure model with every relocation as sample unit - this has non-independence/pseudoreplication issues if used directly in statistical models without nesting variables and careful statistical model builds.
+
+#wrangle for appropriate simplified data structures####
+#population-level data structure####
+#data structure models habitat & time as sample units with no non-independence issues
+#pop.data <-data %>% group_by(mesohabitat, microhabitat.simple, time.class, behavior) %>% count(behavior)
+#pop.data #n equals number of days by am/pm (77).
+
+#pop-data with gender
+#pop.data.gen <-data %>% 
+  #group_by(gender, mesohabitat, microhabitat.simple, time.class, behavior) %>% 
+  #count(behavior)
+#pop.data.gen #n equals number of days by am/pm (77).
+
+#lizard-level data structure####
+#data structure models individual lizards as sample unit
+#lizard.data <- data %>% group_by(lizard, gender, mesohabitat, microhabitat.simple, time.class, behavior) %>% count(behavior)
+#lizard.data #n equals each lizard in every habitat scale by time so time and space not fully independently sampled but each lizard is sample unit with repeated measures (396).
+
+#lizard-level weighted frequencies could be added here too
+#sum up total relocations per lizard by mesohabitat (n) then divide the shrub/open totals by N.
+#lizard.freq <- lizard.data %>% 
+  #group_by(lizard, gender, mesohabitat) %>% 
+  #summarise(total.relocations = sum(n))
+
+#lizard.totals <- lizard.data %>% 
+  #group_by(lizard, gender) %>% 
+  #summarize(totals = sum(n)) %>% dplyr::select(-gender)
+
+#lizard.freq <- left_join(lizard.freq, lizard.totals, by = "lizard") %>% mutate(proportionate.association = total.relocations/totals)
+
+#timing####
+timing <- data %>% group_by(date, time.class, behavior) %>% count()
+#timing
+
+lizard.sampling <- data %>% 
+  group_by(lizard, date) %>% count() %>% summarize(count = sum(n))
+lizard.sampling
+summary(lizard.sampling)
+length(unique(lizard.sampling$lizard))
+
+lizard.days <- lizard.sampling %>% group_by(lizard) %>% count()
+lizard.days
+summary(lizard.days)
+greater.than.5 <- lizard.days %>%
+  mutate(threshold = case_when(n < 5 ~ 0, n >=5 ~ 1))
+
+sum(greater.than.5$threshold)
+
+greater.than.0 <- lizard.days %>%
+  mutate(threshold = case_when(n < 1 ~ 0, n >= 1 ~ 1))
+sum(greater.than.0$threshold)
+
+days <- lizard.sampling %>% 
+  group_by(date) %>%
+  count()
+days
+summary(days)
+
+#distributions####
+#require(fitdistrplus)
+
+#pop data structure
+#plotdist(counts$n)
+#descdist(counts$n, boot = 1000)
+#fit.p <- fitdist(counts$n, "pois")
+#summary(fit.p)
+
+#individual data structure
+#plotdist(lizards$n)
+#descdist(lizards$n, boot = 1000)
+#fit.p <- fitdist(lizards$n, "pois")
+#summary(fit.p)
+```
+
+###Maps
+```{r, map, warnings = FALSE, message=FALSE}
+#ggmap
+require(ggmap)
+cali <- get_map(location = c(lon = -119.6, lat = 35.11), zoom = 13)
+#cali <-get_googlemap("california", crop= FALSE, zoom = 10)
+p <-ggmap(cali)
+p + geom_point(data=data, aes(x=long, y=lat, color = time.class), alpha = .25, size = 0.75) + scale_color_brewer(type = 'seq', palette = "Dark2") + labs(x = "longitude", y = "latitude")
+
+```
