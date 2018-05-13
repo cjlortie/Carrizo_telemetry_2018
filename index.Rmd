@@ -156,3 +156,130 @@ p <-ggmap(cali)
 p + geom_point(data=data, aes(x=long, y=lat, color = rep), alpha = .5, size = 1) + scale_color_brewer(type = 'seq', palette = "Set1") + labs(x = "longitude", y = "latitude", color = "day")
 
 ```
+
+###Home-range models
+```{r, home-range analytics, message=FALSE, warning = FALSE, error=TRUE}
+#simplify data
+s.data <- data %>%
+  dplyr::select(-year, -rep)
+
+#select only lizards with 5 or more relocations
+check <- as.data.frame(table(data$lizard))
+check %>% 
+  arrange(desc(Freq))
+
+s.data <- s.data %>% 
+  dplyr::filter(lizard != "12B" & lizard != "47") #were not 5 relocations
+
+#convert to UTM and set units to m
+track.pop <-s.data
+coordinates(track.pop) <- ~long+lat
+proj4string(track.pop) <- CRS("+proj=longlat") #assign projection and coordinate reference system
+track.pop <- spTransform(track.pop, CRS("+proj=utm +zone=10")) #transform
+
+#Minimum Convex Polygon####
+#Population
+mcp.pop <- adehabitatHR::mcp(track.pop, percent=95, unin = c("m"), unout = c("km2")) #unout is units out
+mcp.pop
+as.data.frame(mcp.pop)
+plot(mcp.pop)
+plot(track.pop, add= TRUE)
+
+#Individuals
+mcp.ind <- mcp(track.pop[,1], percent=95, unin = c("m"), unout = c("m")) #adding the [,1] tells it the ID and then does individually instead of collectively.
+#mcp.pop <- mcp(track.pop[,1], percent=95, unin = c("km"), unout = c("km")) 
+mcp.ind #total area each lizard occupies
+as.data.frame(mcp.ind)
+plot(mcp.ind, col= mcp.ind$id)
+
+
+plot(mcp.pop)
+plot(track.pop, add= TRUE, col= mcp.ind$id)
+
+#areas via mcp calc for each individual converted to ha
+#areas <- as.data.frame(mcp.ind)
+#areas <- areas %>% 
+  #rename(lizard = id)
+
+#areas <- left_join(areas, lizards, by = "lizard")  
+#areas <- areas %>% 
+  #na.omit(gender) %>% 
+  #mutate(area.ha = area *0.0001) %>% dplyr::select(-area)
+#write_csv(areas, "data/areas.csv")
+#areas
+
+#summ.areas <- areas %>%
+  #group_by(gender) %>%
+  #summarize(mean.ha = mean(area.ha), se = #sd(area.ha)/sqrt(length(area.ha)))
+#summ.areas
+          
+
+#MCP Area####
+#Population
+mcp.area <- mcp.area(track.pop, percent = seq(20,100, by = 5), unin = c("m"), unout = c("km2"), plotit = FALSE)
+mcp.area
+as.data.frame(mcp.area)
+mcp.area <- mcp.area %>% mutate(step=seq(20,100, 5))
+summary(mcp.area) #mean hr size for all lizards tracked
+
+ggplot(mcp.area, aes(step, a)) + geom_point() + geom_smooth(se = FALSE) + 
+  xlab("home-range level") + 
+  ylab("home-range size in km2")
+
+#Individual
+mcp.area.ind <- mcp.area(track.pop[,1], percent = seq(20,100, by = 5), unin = c("m"), unout = c("km2"), plotit = FALSE)
+mcp.area.ind #curves
+as.data.frame(mcp.area.ind)
+
+individuals <- mcp.area.ind %>% mutate(step=seq(20,100, 5))
+individuals <- as_tibble(individuals)
+individuals <- individuals %>% gather(c(1:28), key = "individual", value = "mcp.area")
+
+ggplot(individuals, aes(step, mcp.area, color = individual)) + geom_point() + geom_smooth(se = FALSE) + 
+  xlab("home-range level") + 
+  ylab("home-range size in km2")
+
+#wrangle in lizard traits###
+#individuals <- individuals %>% 
+  rename(lizard = individual)
+#individuals <- left_join(individuals, lizards, by = "lizard")  
+
+#individuals <- individuals %>% 
+  #na.omit(gender) %>% mutate(area.ha = mcp.area*100)
+
+
+#ggplot(individuals, aes(step, mcp.area, color = gender)) + geom_point() + geom_smooth() + 
+  #xlab("home-range level") + 
+  #ylab("home-range size in km2")
+
+#ggplot(individuals, aes(step, area.ha, color = gender)) + geom_point() + geom_smooth() + 
+  #xlab("home-range level") + 
+  #ylab("home-range size in ha")
+
+#area.summary <- individuals %>%
+  #group_by(gender) %>%
+  #filter(step == 100) %>%
+  #summarise(mean.ha = mean(area.ha), se = sd(area.ha)/sqrt(length(area.ha)))
+#area.summary
+
+#max.area <- individuals %>%
+  #filter(step == 100)
+#m <- glm(area.ha~gender + mass, family = gaussian, max.area)
+#anova(m, test = "Chisq")
+
+#t.test(max.area$area.ha~max.area$gender)
+
+#m <- glm(area.ha~gender*mass, family = gaussian, max.area)
+#anova(m, test = "Chisq")
+
+#ggplot(max.area, aes(gender, area.ha)) +
+  #geom_boxplot()
+
+#ggplot(max.area, aes(mass, area.ha, color = gender)) +
+  #geom_point() +
+  #geom_smooth(method = "lm") +
+  #labs(x = "mass in g at capture", y = "area in ha")
+
+#summary(lm(area.ha~mass + gender, data = max.area))
+
+```
