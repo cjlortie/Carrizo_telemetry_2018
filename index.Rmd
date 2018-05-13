@@ -58,6 +58,7 @@ data <- read_csv("data/telemetry.relocations.csv")
 library(hms)
 data$time <- as.hms(data$time)
 data
+data$rep <- as.character(data$rep)
 #data <- data %>% mutate(day.time = if(data$time >= 12) { 
   #print("PM")} else {print("AM")
     #})
@@ -149,9 +150,9 @@ summary(days)
 ```{r, map, warnings = FALSE, message=FALSE}
 #ggmap
 require(ggmap)
-cali <- get_map(location = c(lon = -119.6, lat = 35.11), zoom = 13)
+cali <- get_map(location = c(lon = -119.625, lat = 35.12), zoom = 15)
 #cali <-get_googlemap("california", crop= FALSE, zoom = 10)
 p <-ggmap(cali)
-p + geom_point(data=data, aes(x=long, y=lat, color = time.class), alpha = .25, size = 0.75) + scale_color_brewer(type = 'seq', palette = "Dark2") + labs(x = "longitude", y = "latitude")
+p + geom_point(data=data, aes(x=long, y=lat, color = rep), alpha = .5, size = 1) + scale_color_brewer(type = 'seq', palette = "Set1") + labs(x = "longitude", y = "latitude", color = "day")
 
 ```
