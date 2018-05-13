@@ -190,6 +190,7 @@ mcp.ind <- mcp(track.pop[,1], percent=95, unin = c("m"), unout = c("m")) #adding
 #mcp.pop <- mcp(track.pop[,1], percent=95, unin = c("km"), unout = c("km")) 
 mcp.ind #total area each lizard occupies
 as.data.frame(mcp.ind)
+
 plot(mcp.ind, col= mcp.ind$id)
 
 
