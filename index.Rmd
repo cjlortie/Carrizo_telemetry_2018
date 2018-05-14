@@ -153,7 +153,6 @@ gpx <- data %>%
 #as.data.frame(gpx)
 #writeGPX(gpx, "data/bnll", type = "w")
 
-
 ```
 
 ###Maps
