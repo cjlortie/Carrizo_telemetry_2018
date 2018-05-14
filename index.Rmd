@@ -144,6 +144,14 @@ summary(days)
 #descdist(lizards$n, boot = 1000)
 #fit.p <- fitdist(lizards$n, "pois")
 #summary(fit.p)
+
+#write_gpx####
+library(pgirmess)
+gpx <- data %>%
+  dpylr::select(rep, lat, long)
+  
+
+
 ```
 
 ###Maps
