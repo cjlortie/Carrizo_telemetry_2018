@@ -423,7 +423,15 @@ days</code></pre>
 #plotdist(lizards$n)
 #descdist(lizards$n, boot = 1000)
 #fit.p &lt;- fitdist(lizards$n, &quot;pois&quot;)
-#summary(fit.p)</code></pre>
+#summary(fit.p)
+
+#write_gpx####
+library(pgirmess)
+gpx &lt;- data %&gt;%
+  dplyr::select(rep, long, lat) %&gt;%
+  rename(ID = rep)
+#as.data.frame(gpx)
+#writeGPX(gpx, &quot;data/bnll&quot;, type = &quot;w&quot;)</code></pre>
 </div>
 <div id="maps" class="section level3">
 <h3>Maps</h3>

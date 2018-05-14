@@ -148,8 +148,10 @@ summary(days)
 #write_gpx####
 library(pgirmess)
 gpx <- data %>%
-  dpylr::select(rep, lat, long)
-  
+  dplyr::select(rep, long, lat) %>%
+  rename(ID = rep)
+#as.data.frame(gpx)
+#writeGPX(gpx, "data/bnll", type = "w")
 
 
 ```
