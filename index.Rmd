@@ -150,7 +150,7 @@ library(pgirmess)
 gpx <- data %>%
   dplyr::select(rep, long, lat) %>%
   rename(ID = rep)
-#as.data.frame(gpx)
+as.data.frame(gpx)
 #writeGPX(gpx, "data/bnll", type = "w")
 
 ```
@@ -170,7 +170,7 @@ p + geom_point(data=data, aes(x=long, y=lat, color = rep), alpha = .5, size = 1)
 ```{r, home-range analytics, message=FALSE, warning = FALSE, error=TRUE}
 #simplify data
 s.data <- data %>%
-  dplyr::select(-year, -rep)
+  dplyr::select(lizard, date, time.class, long, lat)
 
 #select only lizards with 5 or more relocations
 check <- as.data.frame(table(data$lizard))
@@ -183,7 +183,7 @@ check %>%
 #convert to UTM and set units to m
 track.pop <-s.data
 coordinates(track.pop) <- ~long+lat
-proj4string(track.pop) <- CRS("+proj=longlat") #assign projection and coordinate reference system
+proj4string(track.pop) <- CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0") #assign projection and coordinate reference system
 track.pop <- spTransform(track.pop, CRS("+proj=utm +zone=10")) #transform
 
 #Minimum Convex Polygon####
