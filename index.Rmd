@@ -159,7 +159,7 @@ gpx <- data %>%
 ```{r, map, warnings = FALSE, message=FALSE}
 #ggmap
 require(ggmap)
-cali <- get_map(location = c(lon = -119.625, lat = 35.12), zoom = 15)
+cali <- get_map(location = c(lon = -119.625, lat = 35.12), zoom = 14)
 #cali <-get_googlemap("california", crop= FALSE, zoom = 10)
 p <-ggmap(cali)
 p + geom_point(data=data, aes(x=long, y=lat, color = rep), alpha = .5, size = 1) + scale_color_brewer(type = 'seq', palette = "Set1") + labs(x = "longitude", y = "latitude", color = "day")
