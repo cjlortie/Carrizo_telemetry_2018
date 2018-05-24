@@ -1023,13 +1023,13 @@ mcp.area &lt;- mcp.area(track.pop, percent = seq(20,100, by = 5), unin = c(&quot
 ##         plot(ar)
 ##     return(ar)
 ## }
-## &lt;bytecode: 0x7fcc0b3f40d0&gt;
+## &lt;bytecode: 0x7fa12819bcd0&gt;
 ## &lt;environment: namespace:adehabitatHR&gt;</code></pre>
 <pre class="r"><code>as.data.frame(mcp.area)</code></pre>
 <pre><code>## function (...) 
 ## data.frame(value = x(...))
-## &lt;bytecode: 0x7fcc118ebed0&gt;
-## &lt;environment: 0x7fcc118eb920&gt;</code></pre>
+## &lt;bytecode: 0x7fa12885a4d0&gt;
+## &lt;environment: 0x7fa128859f20&gt;</code></pre>
 <pre class="r"><code>mcp.area &lt;- mcp.area %&gt;% mutate(step=seq(20,100, 5))</code></pre>
 <pre><code>## Error in UseMethod(&quot;mutate_&quot;): no applicable method for 'mutate_' applied to an object of class &quot;function&quot;</code></pre>
 <pre class="r"><code>summary(mcp.area) #mean hr size for all lizards tracked</code></pre>

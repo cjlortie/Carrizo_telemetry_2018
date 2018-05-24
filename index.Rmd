@@ -151,7 +151,7 @@ gpx <- data %>%
   dplyr::select(rep, long, lat) %>%
   rename(ID = rep)
 as.data.frame(gpx)
-writeGPX(gpx, "data/bnll", type = "w")
+#writeGPX(gpx, "data/bnll", type = "w")
 
 ```
 
