@@ -34,7 +34,7 @@ A total of 30 lizards were instrumented in the Carrizo National Monument by West
 #wrangling
 library(tidyverse)
 
-#packages <- c("rgdal", "maps", "multcomp", "nnet", "adehabitatHR", "raster", "maptools", "leaflet")
+packages <- c("rgdal", "maps", "multcomp", "nnet", "adehabitatHR", "raster", "maptools", "leaflet")
 
 #basic maps
 library(rgdal)
@@ -59,6 +59,7 @@ library(hms)
 data$time <- as.hms(data$time)
 data
 data$rep <- as.character(data$rep)
+
 #data <- data %>% mutate(day.time = if(data$time >= 12) { 
   #print("PM")} else {print("AM")
     #})
