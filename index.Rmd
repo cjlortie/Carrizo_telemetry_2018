@@ -34,7 +34,7 @@ A total of 30 lizards were instrumented in the Carrizo National Monument by West
 #wrangling
 library(tidyverse)
 
-packages <- c("rgdal", "maps", "multcomp", "nnet", "adehabitatHR", "raster", "maptools", "leaflet")
+packages <- c("rgdal", "maps", "multcomp", "nnet", "adehabitatHR", "raster", "maptools", "leaflet", "ggmap")
 
 #basic maps
 library(rgdal)
@@ -147,11 +147,11 @@ summary(days)
 #summary(fit.p)
 
 #write_gpx####
-library(pgirmess)
-gpx <- data %>%
-  dplyr::select(rep, long, lat) %>%
-  rename(ID = rep)
-as.data.frame(gpx)
+#library(pgirmess)
+#gpx <- data %>%
+  #dplyr::select(rep, long, lat) %>%
+  #rename(ID = rep)
+#as.data.frame(gpx)
 #writeGPX(gpx, "data/bnll", type = "w")
 
 ```
