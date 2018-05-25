@@ -59,6 +59,7 @@ library(hms)
 data$time <- as.hms(data$time)
 data
 data$rep <- as.character(data$rep)
+data$lizard <- as.character(data$lizard)
 
 #data <- data %>% mutate(day.time = if(data$time >= 12) { 
   #print("PM")} else {print("AM")
