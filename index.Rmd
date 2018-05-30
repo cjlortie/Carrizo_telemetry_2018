@@ -188,8 +188,8 @@ check <- as.data.frame(table(data$lizard))
 check %>% 
   arrange(desc(Freq))
 
-#s.data <- s.data %>% 
-  #dplyr::filter(lizard != "12B" & lizard != "47") #were not 5 relocations
+s.data <- s.data %>% 
+  dplyr::filter(lizard != "23" & lizard != "25" & lizard != "26" & lizard != "16") #were not 5 relocations
 
 #convert to UTM and set units to m
 track.pop <-s.data
@@ -207,7 +207,7 @@ plot(track.pop, add= TRUE)
 
 #Individuals
 mcp.ind <- mcp(track.pop[,1], percent=95, unin = c("m"), unout = c("m")) #adding the [,1] tells it the ID and then does individually instead of collectively.
-#mcp.pop <- mcp(track.pop[,1], percent=95, unin = c("km"), unout = c("km")) 
+mcp.pop <- mcp(track.pop[,1], percent=95, unin = c("km"), unout = c("km")) 
 mcp.ind #total area each lizard occupies
 as.data.frame(mcp.ind)
 
