@@ -132,6 +132,47 @@ days <- lizard.sampling %>%
 days
 summary(days)
 
+#timing
+timing <- data %>%
+  group_by(time.class)  %>%
+  count()
+timing
+
+#behavior
+behavior <- data %>%
+  group_by(behavior) %>%
+  count()
+behavior
+
+
+#meso
+meso <- data %>%
+  group_by(mesohabitat) %>%
+  count()
+meso
+
+#micro
+micro <- data %>%
+  group_by(microhabitat1) %>%
+  count()
+knitr::kable(micro)
+
+micro.time <- data %>%
+  group_by(rep, microhabitat1) %>%
+  count()
+micro.time$rep <- as.numeric(micro.time$rep)
+
+micro.changes <- micro.time %>%
+  filter(microhabitat1 == "below" | microhabitat1 == "burrow")
+
+#under
+grounded <- data %>%
+  group_by(rep, ground) %>%
+  count()
+grounded$rep <- as.numeric(grounded$rep)
+  
+
+
 #distributions####
 #require(fitdistrplus)
 
@@ -174,6 +215,26 @@ p + geom_point(data=data, aes(x=long, y=lat, color = rep), alpha = .5, size = 1)
 
 #p + geom_point(data=data, aes(x=long, y=lat), alpha = .5, size = 1) +
   #labs(x = "longitude", y = "latitude")
+
+```
+
+###Viz  
+```{r, viz, warning=FALSE, message=FALSE}
+ggplot(micro.time, aes(rep, n, color = microhabitat1)) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE) +
+  labs(x = "day", y = "count", color = "")
+
+ggplot(micro.changes, aes(rep, n, color = microhabitat1)) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  labs(x = "day", y = "count", color = "")
+
+ggplot(grounded, aes(rep, n, color = ground)) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  labs(x = "day", y = "count", color = "")
+
 
 ```
 
