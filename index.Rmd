@@ -61,6 +61,10 @@ data
 data$rep <- as.character(data$rep)
 data$lizard <- as.character(data$lizard)
 
+lizard.list <- unique(data$lizard)
+lizard.list
+
+
 #data <- data %>% mutate(day.time = if(data$time >= 12) { 
   #print("PM")} else {print("AM")
     #})
@@ -68,10 +72,13 @@ data$lizard <- as.character(data$lizard)
 #data$behavior <- gsub("standing", "underground", data$behavior)
 
 #wrangle in gender of lizards here
-#lizards <- read_csv("data/lizards.2016.csv")
-#lizards <- lizards %>% dplyr::select(lizard, gender, mass, length.mm)
+lizards <- read_csv("data/lizards.2018.csv")
+lizards <- lizards %>% dplyr::select(lizard, gender, mass.g, svl.cm)
 #lizards <- lizards %>% filter(gender != "uk")
-#data <- left_join(data, lizards, by = "lizard")  
+
+data.full <- left_join(data, lizards, by = "lizard")  
+data.full <- data.full %>%
+  dplyr::select(-notes, -pulseinterval, -'microhabitat 2', -'microhabitat 3')
 
 #the 'data' dataframe = a data structure model with every relocation as sample unit - this has non-independence/pseudoreplication issues if used directly in statistical models without nesting variables and careful statistical model builds.
 

@@ -283,17 +283,38 @@ data</code></pre>
 <pre class="r"><code>data$rep &lt;- as.character(data$rep)
 data$lizard &lt;- as.character(data$lizard)
 
-#data &lt;- data %&gt;% mutate(day.time = if(data$time &gt;= 12) { 
+lizard.list &lt;- unique(data$lizard)
+lizard.list</code></pre>
+<pre><code>##  [1] &quot;1&quot;    &quot;2&quot;    &quot;11&quot;   &quot;12&quot;   &quot;19&quot;   &quot;20&quot;   &quot;39&quot;   &quot;64&quot;   &quot;7&quot;    &quot;22&quot;  
+## [11] &quot;30&quot;   &quot;35&quot;   &quot;44&quot;   &quot;1337&quot; &quot;56&quot;   &quot;47&quot;   &quot;31&quot;   &quot;80&quot;   &quot;91&quot;   &quot;93&quot;  
+## [21] &quot;99&quot;   &quot;100&quot;  &quot;4&quot;    &quot;13&quot;   &quot;40&quot;   &quot;200&quot;  &quot;9&quot;    &quot;130&quot;  &quot;176&quot;  &quot;12B&quot; 
+## [31] &quot;16&quot;   &quot;26&quot;   &quot;23&quot;   &quot;25&quot;</code></pre>
+<pre class="r"><code>#data &lt;- data %&gt;% mutate(day.time = if(data$time &gt;= 12) { 
   #print(&quot;PM&quot;)} else {print(&quot;AM&quot;)
     #})
 #data &lt;- data %&gt;% filter(behavior != &quot;avoiding.predators&quot;)
 #data$behavior &lt;- gsub(&quot;standing&quot;, &quot;underground&quot;, data$behavior)
 
 #wrangle in gender of lizards here
-#lizards &lt;- read_csv(&quot;data/lizards.2016.csv&quot;)
-#lizards &lt;- lizards %&gt;% dplyr::select(lizard, gender, mass, length.mm)
+lizards &lt;- read_csv(&quot;data/lizards.2018.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   year = col_integer(),
+##   lizard = col_character(),
+##   frequency = col_double(),
+##   radio = col_integer(),
+##   svl.cm = col_double(),
+##   tail.cm = col_double(),
+##   mass.g = col_double(),
+##   gender = col_character(),
+##   gravid = col_character()
+## )</code></pre>
+<pre class="r"><code>lizards &lt;- lizards %&gt;% dplyr::select(lizard, gender, mass.g, svl.cm)
 #lizards &lt;- lizards %&gt;% filter(gender != &quot;uk&quot;)
-#data &lt;- left_join(data, lizards, by = &quot;lizard&quot;)  
+
+data.full &lt;- left_join(data, lizards, by = &quot;lizard&quot;)  
+data.full &lt;- data.full %&gt;%
+  dplyr::select(-notes, -pulseinterval, -'microhabitat 2', -'microhabitat 3')
 
 #the 'data' dataframe = a data structure model with every relocation as sample unit - this has non-independence/pseudoreplication issues if used directly in statistical models without nesting variables and careful statistical model builds.
 
