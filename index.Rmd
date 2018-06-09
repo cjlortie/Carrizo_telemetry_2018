@@ -119,6 +119,7 @@ lizard.data <- data %>%
 
 #lizard.freq <- left_join(lizard.freq, lizard.totals, by = "lizard") %>% mutate(proportionate.association = total.relocations/totals)
 
+#QA/QC####
 #timing####
 timing <- data %>% group_by(date, time.class, behavior) %>% count()
 #timing
@@ -175,6 +176,10 @@ micro <- data %>%
   group_by(microhabitat1) %>%
   count()
 knitr::kable(micro)
+
+scales <- data %>%
+  group_by(time.class, mesohabitat,microhabitat.simple) %>%
+  count()
 
 micro.time <- data %>%
   group_by(rep, microhabitat1) %>%
@@ -262,6 +267,22 @@ ggplot(meso.b, aes(behavior, n, color = mesohabitat)) +
   geom_point() +
   coord_flip() +
   scale_color_brewer(palette = "Set1")
+
+#scales plot
+ggplot(scales, aes(microhabitat.simple, n)) +
+  geom_boxplot() +
+  coord_flip()
+
+ggplot(scales, aes(microhabitat.simple, n)) +
+  geom_boxplot() +
+  coord_flip() +
+  facet_wrap(~time.class)
+
+ggplot(scales, aes(microhabitat.simple, n, color = mesohabitat)) +
+  geom_point() +
+  coord_flip() +
+  scale_color_brewer(palette = "Set1")
+
 
 ggplot(na.exclude(pop.data), aes(mesohabitat, n)) +
   geom_boxplot() +
