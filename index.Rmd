@@ -151,6 +151,10 @@ meso <- data %>%
   count()
 meso
 
+meso.b <- data %>%
+  group_by(mesohabitat, behavior) %>%
+  count()
+
 #micro
 micro <- data %>%
   group_by(microhabitat1) %>%
@@ -235,6 +239,15 @@ ggplot(grounded, aes(rep, n, color = ground)) +
   geom_smooth(method = lm) +
   labs(x = "day", y = "count", color = "")
 
+
+ggplot(meso.b, aes(behavior, n)) +
+  geom_boxplot() +
+  coord_flip()
+
+ggplot(meso.b, aes(behavior, n, color = mesohabitat)) +
+  geom_point() +
+  coord_flip() +
+  scale_color_brewer(palette = "Set1")
 
 ```
 
