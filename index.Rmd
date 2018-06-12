@@ -248,20 +248,10 @@ ggplot(micro.time, aes(rep, n, color = microhabitat1)) +
   geom_smooth(method = lm, se = FALSE) +
   labs(x = "day", y = "count", color = "")
 
-ggplot(micro.changes, aes(rep, n, color = microhabitat1)) +
-  geom_point() +
-  geom_smooth(method = lm) +
-  labs(x = "day", y = "count", color = "")
-
 ggplot(grounded, aes(rep, n, color = ground)) +
   geom_point() +
   geom_smooth(method = lm) +
   labs(x = "day", y = "count", color = "")
-
-
-ggplot(meso.b, aes(behavior, n)) +
-  geom_boxplot() +
-  coord_flip()
 
 ggplot(meso.b, aes(behavior, n, color = mesohabitat)) +
   geom_point() +
@@ -271,37 +261,18 @@ ggplot(meso.b, aes(behavior, n, color = mesohabitat)) +
 #scales plot
 ggplot(scales, aes(microhabitat.simple, n)) +
   geom_boxplot() +
-  coord_flip()
-
-ggplot(scales, aes(microhabitat.simple, n)) +
-  geom_boxplot() +
   coord_flip() +
   facet_wrap(~time.class)
-
-ggplot(scales, aes(microhabitat.simple, n, color = mesohabitat)) +
-  geom_point() +
-  coord_flip() +
-  scale_color_brewer(palette = "Set1")
-
-
-ggplot(na.exclude(pop.data), aes(mesohabitat, n)) +
-  geom_boxplot() +
-  facet_wrap(~time.class) + 
-  scale_fill_brewer(palette = "Greens") +
-  xlab("mesohabitat") +
-  coord_flip()
 
 ggplot(na.exclude(pop.data.gen), aes(mesohabitat, n)) +
   geom_boxplot() +
   facet_wrap(~time.class*gender) + 
-  scale_fill_brewer(palette = "Greens") +
   xlab("mesohabitat") +
   coord_flip()
 
 ggplot(na.exclude(pop.data.gen), aes(mesohabitat, n, fill = behavior)) +
   geom_boxplot() +
-  facet_wrap(~time.class*gender) + 
-  scale_fill_brewer(palette = "Greens") +
+  facet_wrap(~time.class*gender) +
   xlab("mesohabitat") +
   coord_flip()
 
