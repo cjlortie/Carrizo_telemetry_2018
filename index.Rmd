@@ -425,5 +425,6 @@ library(pwr)
 pwr.anova.test(f=0.1,k=2,n=120,sig.level=0.05)
 pwr.anova.test(f=0.1,k=2,n=300,sig.level=0.05)
 pwr.anova.test(f=0.1,k=2,n=400,sig.level=0.05)
+pwr.anova.test(f=0.1,k=2,n=500,sig.level=0.05)
 
 ```
