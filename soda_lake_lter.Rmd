@@ -1,0 +1,39 @@
+---
+title:
+author: "cjlortie"
+date: "2018"
+output:
+  html_document:
+    theme: flatly
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+#Long-term plots managed by Tim Bean  
+
+###Data
+```{r, data, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(ggmap)
+
+data <- read_csv("protocols (bean)/plot_centers.csv")
+data
+
+```
+
+
+###Map
+```{r, map, warning=FALSE, message=FALSE}
+cali <- get_map(location = c(lon = -119.7, lat = 35.10), zoom = 13)
+#cali <-get_googlemap("california", crop= FALSE, zoom = 10)
+p <-ggmap(cali)
+p + geom_point(data=data, aes(x=long, y=lat), alpha = .5, size = 1) + 
+  labs(x = "longitude", y = "latitude")
+
+p + geom_point(data=data, aes(x=long, y=lat, color = code), alpha = .75, size = 1.5) + 
+  labs(x = "longitude", y = "latitude") +
+  scale_color_brewer(palette = "Set1")
+
+```
