@@ -19,7 +19,14 @@ library(tidyverse)
 library(ggmap)
 
 data <- read_csv("protocols (bean)/plot_centers.csv")
-data
+#data
+
+cams <- read_csv("protocols (bean)/camtraps_shrubfreezone.csv")
+#cams
+cams$ID <- as.character(cams$ID)
+
+data <- bind_rows(data, cams)
+#data
 
 ```
 
