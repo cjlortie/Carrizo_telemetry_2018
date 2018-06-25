@@ -299,6 +299,17 @@ as.data.frame(mcp.pop)
 plot(mcp.pop)
 plot(track.pop, add= TRUE)
 
+#Quick interactive look at HR for pop
+library(leaflet)
+library(leaflet.extras)
+pop <- spTransform(mcp.pop, CRS("+init=epsg:4629")) #need to inform leaflet projection
+
+m <- leaflet() %>%
+  addTiles(urlTemplate="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}") %>%  
+  addPolygons(data = pop, stroke = FALSE, fillOpacity = 0.5, smoothFactor = 0.5) %>%
+  addScaleBar()
+m
+
 #Individuals
 mcp.ind <- mcp(track.pop[,1], percent=95, unin = c("m"), unout = c("m")) #adding the [,1] tells it the ID and then does individually instead of collectively.
 mcp.pop <- mcp(track.pop[,1], percent=95, unin = c("km"), unout = c("km")) 
@@ -308,6 +319,18 @@ plot(mcp.ind, col= mcp.ind$id)
 
 plot(mcp.pop)
 plot(track.pop, add= TRUE, col= mcp.ind$id)
+
+#Quick interactive look at HR for individuals
+library(leaflet)
+library(leaflet.extras)
+pop <- spTransform(mcp.pop, CRS("+init=epsg:4629")) #need to inform leaflet projection
+
+m <- leaflet() %>%
+  addTiles(urlTemplate="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}") %>%  
+  addPolygons(data = pop, stroke = FALSE, fillOpacity = 0.5, smoothFactor = 0.5) %>%
+  addScaleBar()
+m
+
 
 #areas via mcp calc for each individual converted to ha
 areas <- as.data.frame(mcp.ind)
