@@ -55,6 +55,12 @@ library(maptools)
 ```{r, data}
 #load population data####
 data <- read_csv("data/telemetry.relocations.csv")
+
+
+#data <- data %>% 
+  #filter(observer != "tai" & observer != "marie")
+
+
 library(hms)
 data$time <- as.hms(data$time)
 data
@@ -79,7 +85,7 @@ lizards <- lizards %>% dplyr::select(lizard, gender, mass.g, svl.cm)
 
 data <- left_join(data, lizards, by = "lizard")  
 data <- data %>%
-  dplyr::select(-notes, -pulseinterval, -'microhabitat 2', -'microhabitat 3')
+  dplyr::select(-notes, -'microhabitat 2', -'microhabitat 3')
 
 data <- data %>%
   mutate(microhabitat.simple = microhabitat1)
@@ -157,9 +163,9 @@ timing
 #behavior
 behavior <- data %>%
   group_by(behavior) %>%
-  count()
+  count() %>%
+  arrange(desc(n))
 behavior
-
 
 #meso
 meso <- data %>%
@@ -174,8 +180,9 @@ meso.b <- data %>%
 #micro
 micro <- data %>%
   group_by(microhabitat1) %>%
-  count()
-knitr::kable(micro)
+  count() %>%
+  arrange(desc(n))
+micro
 
 scales <- data %>%
   group_by(time.class, mesohabitat,microhabitat.simple) %>%
