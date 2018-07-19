@@ -399,7 +399,7 @@ ggplot(individuals, aes(step, mcp.area, color = individual)) + geom_point() + ge
 
 #wrangle in lizard traits###
 #individuals <- individuals %>% 
-  rename(lizard = individual)
+  #rename(lizard = individual)
 #individuals <- left_join(individuals, lizards, by = "lizard")  
 
 #individuals <- individuals %>% 
