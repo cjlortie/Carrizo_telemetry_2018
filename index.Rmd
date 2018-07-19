@@ -282,8 +282,8 @@ check <- as.data.frame(table(data$lizard))
 check %>% 
   arrange(desc(Freq))
 
-s.data <- s.data %>% 
-  dplyr::filter(lizard != "23" & lizard != "25" & lizard != "26" & lizard != "16") #were not 5 relocations
+#s.data <- s.data %>% 
+  #dplyr::filter(lizard != "23" & lizard != "25" & lizard != #"26" & lizard != "16") #were not 5 relocations
 
 #convert to UTM and set units to m
 track.pop <-s.data
